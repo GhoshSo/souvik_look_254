@@ -25,6 +25,7 @@ view: order_items {
     type: string
     sql: ${TABLE}.phones ;;
   }
+
   dimension_group: returned {
     type: time
     timeframes: [raw, time, date, week, month, quarter, year]
@@ -34,6 +35,39 @@ view: order_items {
     type: number
     sql: ${TABLE}.sale_price ;;
   }
+
+  parameter: date_granularity {
+    type: unquoted
+    allowed_value: {
+      label: "Break down by Day"
+      value: "day"
+    }
+    allowed_value: {
+      label: "Break down by Month"
+      value: "month"
+    }
+  }
+
+  dimension: date {
+    sql:
+    {% if date_granularity._parameter_value == 'day' %}
+      ${returned_date}
+    {% elsif date_granularity._parameter_value == 'month' %}
+      ${returned_date}
+    {% else %}
+      ${orders.item_to_add_up}
+    {% endif %};;
+    html:
+    {% if date_granularity._parameter_value == 'day' %}
+      <font color="darkgreen">{{ rendered_value }}</font>
+   {% elsif date_granularity._parameter_value == 'month' %}
+      <font color="darkred">{{ rendered_value }}</font>
+    {% else %}
+      <font color="black">{{ rendered_value }}</font>
+    {% endif %};;
+  }
+
+
   measure: count {
     type: count
     drill_fields: [id, orders.id, inventory_items.id]
