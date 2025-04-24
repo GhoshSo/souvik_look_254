@@ -16,6 +16,10 @@ view: orders {
     type: string
     sql: ${TABLE}.status ;;
   }
+  dimension: status_new {
+    type: string
+    sql: CONCAT('[',${status},']') ;;
+  }
   dimension: user_id {
     type: number
     # hidden: yes
