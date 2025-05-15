@@ -137,6 +137,14 @@ explore: orders {
 }
 
 explore: order_items {
+  access_filter: {
+    field: users.gender
+    user_attribute: gender
+  }
+  access_filter: {
+    field: users.city
+    user_attribute: city
+  }
   join: orders {
     type: left_outer
     sql_on: ${order_items.order_id} = ${orders.id} ;;

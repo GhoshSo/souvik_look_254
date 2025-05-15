@@ -7,6 +7,8 @@ view: flights {
   }
   dimension_group: arr {
     type: time
+    convert_tz: no
+    datatype: datetime
     timeframes: [raw, time, date, week, month, quarter, year]
     sql: ${TABLE}.arr_time ;;
   }
@@ -34,6 +36,10 @@ view: flights {
   dimension: distance {
     type: number
     sql: ${TABLE}.distance ;;
+  }
+  measure: sum_distance {
+    type: sum
+    sql: ${distance} ;;
   }
   dimension: diverted {
     type: string

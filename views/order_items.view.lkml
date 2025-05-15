@@ -48,6 +48,26 @@ view: order_items {
     }
   }
 
+ measure: total_sp {
+  type: number
+  sql: sum(${sale_price}) ;;
+}
+measure: total_order_id {
+  type: number
+  sql: sum(${order_id}) ;;
+}
+measure: total_sp_vs_total_order_id {
+  type: number
+  sql:
+      {% if orders.status._in_query %}
+      ifnull(${total_sp}/10000,0)
+      {% else %}
+      ifnull(${total_order_id}/1000,0)
+      {% endif %}
+    ;;
+  html: {{ value | abs | times: 100 | round: 2}}% ;;
+}
+
   dimension: date {
     sql:
     {% if date_granularity._parameter_value == 'day' %}
